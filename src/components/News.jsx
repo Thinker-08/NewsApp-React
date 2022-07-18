@@ -31,6 +31,7 @@ export default class News extends Component {
         document.title="MyNews - "+ this.capitalizeFirstLetter(this.props.category);
     }
     fetchMoreData=async ()=>{
+        console.log("Fetch More")
         let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         let data = await fetch(url);
         let parsedData = await data.json();
@@ -41,6 +42,7 @@ export default class News extends Component {
         })
     }
     async componentDidMount(){
+        console.log("component Did Mount")
         this.props.setProgress(10);
         let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         this.setState({loading:true})
@@ -57,7 +59,7 @@ export default class News extends Component {
   render() {
     return (
         <>
-            <h1 className="text-center" style={{margin:"40px"}}>MyNews- Top Headlines from {this.capitalizeFirstLetter(this.props.category)} Headlines</h1>
+            <h1 className="text-center" style={{margin:"40px",marginTop:"100px"}}>MyNews- Top Headlines from {this.capitalizeFirstLetter(this.props.category)} Headlines</h1>
                 {this.state.loading && <Spinner/>}
                 <InfiniteScroll dataLength={this.state.articles.length} next={this.fetchMoreData} hasMore={this.state.articles.length!==this.state.totalResults} loader={<Spinner/>}>
                 <div className="container">
@@ -65,7 +67,7 @@ export default class News extends Component {
                     {this.state.articles.map((ele)=>{
                     return(
                         <div className="col-lg-4 my-3" key={ele.url?ele.url:"/"}>
-                            <NewsItem title={ele.title?ele.title:""} description={ele.description?ele.description.slice(0,90):" "}
+                            <NewsItem title={ele.title?ele.title:" "} description={ele.description?ele.description.slice(0,90):" "}
                             img_url={ele.urlToImage?ele.urlToImage:"https://c.ndtvimg.com/2022-06/jlikupmg_virat-kohli-806_625x300_22_June_22.jpg"} 
                             newsUrl={ele.url?ele.url:"/"} author={ele.author?ele.author:"Anonymous"} date={ele.publishedAt} source={ele.source.name}/>    
                         </div>)
